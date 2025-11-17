@@ -1,3 +1,4 @@
+// Tableau de correspondance Regex
 const markdownToHtmlTable = {
   heading1: /^#\s+(.*)/,
   heading2: /^##\s+(.*)/,
@@ -13,8 +14,14 @@ const markdownToHtmlTable = {
   link: /\[(.*?)\]\((.*?)\)/g,
 
   quote: /^>\s+(.*)/i
-}
+};
 
+// Définition des variables
+const markdownInput = document.getElementById('markdown-input');
+const rawHtml = document.getElementById('html-output');
+const htmlPreview = document.getElementById('preview');
+
+// Fonction de conversion 
 const convertMarkdown = () => {
 
 };
