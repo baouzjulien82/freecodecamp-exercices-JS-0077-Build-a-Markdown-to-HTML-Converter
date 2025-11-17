@@ -1,11 +1,8 @@
 // Tableau de correspondance Regex
 const markdownToHtmlTable = {
-  heading1: /^#\s+(.*)/,
-  heading2: /^##\s+(.*)/,
-  heading3: /^###\s+(.*)/,
-  heading4: /^####\s+(.*)/,
-  heading5: /^#####\s+(.*)/,
-  heading6: /^######\s+(.*)/,
+  heading1: /^# (.*)$/gm,
+  heading2: /^## (.*)$/gm,
+  heading3: /^### (.*)$/gm,
 
   bold: /(\*\*|__)(.*?)\1/g,
   italic: /(\*|_)([^*_]+?)\1/g,
@@ -13,7 +10,7 @@ const markdownToHtmlTable = {
   img: /!\[(.*?)\]\((.*?)\)/g,
   link: /\[(.*?)\]\((.*?)\)/g,
 
-  quote: /^>\s+(.*)/i
+  quote: /^> (.*)$/gm
 };
 
 // Définition des variables
@@ -23,56 +20,32 @@ const htmlPreview = document.getElementById('preview');
 
 // Fonction de conversion 
 const convertMarkdown = () => {
-  for(let [key, value] of Object.entries(markdownToHtmlTable)) {
-    if(markdownInput.value.match(value)) {
-      switch(key) {
-        case "heading1":
-        rawHtml.textContent = markdownInput.value.replace(value, "<h1>$1</h1>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<h1>$1</h1>");
-        break;
-        case "heading2":
-        rawHtml.textContent = markdownInput.value.replace(value, "<h2>$1</h2>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<h2>$1</h2>");
-        break;
-        case "heading3":
-        rawHtml.textContent = markdownInput.value.replace(value, "<h3>$1</h3>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<h3>$1</h3>");
-        break;
-        case "heading4":
-        rawHtml.textContent = markdownInput.value.replace(value, "<h4>$1</h4>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<h4>$1</h4>");
-        break;
-        case "heading5":
-        rawHtml.textContent = markdownInput.value.replace(value, "<h5>$1</h5>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<h5>$1</h5>");
-        break;
-        case "heading6":
-        rawHtml.textContent = markdownInput.value.replace(value, "<h6>$1</h6>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<h6>$1</h6>");
-        break;
-        case "bold":
-        rawHtml.textContent = markdownInput.value.replace(value, "<strong>$2</strong>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<strong>$2</strong>");
-        break;
-        case "italic":
-        rawHtml.textContent = markdownInput.value.replace(value, "<em>$2</em>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<em>$2</em>");
-        break;
-        case "img":
-        rawHtml.textContent = markdownInput.value.replace(value, "<img alt='$1' src='$2'>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<img alt='$1' src='$2'>");
-        break;
-        case "link":
-        rawHtml.textContent = markdownInput.value.replace(value, "<a href='$2'>$1</a>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<a href='$2'>$1</a>");
-        break;
-        case "quote":
-        rawHtml.textContent = markdownInput.value.replace(value, "<blockquote>$1</blockquote>");
-        htmlPreview.innerHTML = markdownInput.value.replace(value, "<blockquote>$1</blockquote>");
-        break;
-      };
-    };
-  };
+  let html = markdownInput.value;
+
+  // Headings
+  html = html.replace(markdownToHtmlTable.heading1, "<h1>$1</h1>");
+  html = html.replace(markdownToHtmlTable.heading2, "<h2>$1</h2>");
+  html = html.replace(markdownToHtmlTable.heading3, "<h3>$1</h3>");
+
+  // Blockquotes
+  html = html.replace(markdownToHtmlTable.quote, "<blockquote>$1</blockquote>");
+
+  // Images
+  html = html.replace(markdownToHtmlTable.img, "<img alt='$1' src='$2'>");
+
+  // Links
+  html = html.replace(markdownToHtmlTable.link, "<a href='$2'>$1</a>");
+
+  // Bold & Italic
+  html = html.replace(markdownToHtmlTable.bold, "<strong>$2</strong>");
+  html = html.replace(markdownToHtmlTable.italic, "<em>$2</em>");
+
+  // Mettre à jour l'affichage
+  rawHtml.textContent = html;       // HTML brut
+  htmlPreview.innerHTML = html;     // Rendu visuel
+
+  // Retourner le HTML final pour les tests
+  return html;
 };
 
 // AddEventListener sur l'input
