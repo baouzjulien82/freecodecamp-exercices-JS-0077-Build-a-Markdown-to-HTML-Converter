@@ -23,5 +23,12 @@ const htmlPreview = document.getElementById('preview');
 
 // Fonction de conversion 
 const convertMarkdown = () => {
-
+  for(let [key, value] of Object.entries(markdownToHtmlTable)) {
+    if(markdownInput.value.match(value)) {
+      console.log(key);
+    };
+  };
 };
+
+// AddEventListener sur l'input
+markdownInput.addEventListener('input', convertMarkdown);
